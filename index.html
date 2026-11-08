@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F0E9D2">
 <title>Herenia Sarabia</title>
 <meta name="description" content="Herenia Sarabia — business analyst and product owner. A scroll from a floating mind into its memories.">
@@ -43,7 +43,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .up { text-transform: uppercase; }
 
 /* ---------- stage ---------- */
-#gl { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; z-index: 0; }
+#gl { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; height: 100lvh; display: block; z-index: 0; }
+.vh-probe { position: fixed; left: 0; top: 0; width: 1px; height: 100vh; height: 100lvh; visibility: hidden; pointer-events: none; }
 main { position: relative; z-index: 1; }
 .load-error { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 100; background: #b5532c; color: #fff; padding: 12px 16px; font: 500 14px/1.35 var(--font-sans); text-transform: uppercase; overflow-wrap: anywhere; }
 
@@ -119,7 +120,7 @@ html.no-gl .hero > .hero-still { display: block; }
 
 /* ---------- 2 · inside the mind (pinned) ---------- */
 .mind { position: relative; height: 420vh; }
-.pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 .thought { position: absolute; left: 50%; bottom: 12vh; transform: translateX(-50%); text-align: center; font-family: var(--font-display); text-transform: uppercase; font-size: clamp(20px, 2.2vw, 30px); letter-spacing: 0.04em; color: var(--navy); opacity: 0; transition: opacity 0.6s var(--ease); white-space: nowrap; }
 .thought.on { opacity: 1; }
 .chapter { position: absolute; left: var(--gut); top: 50%; transform: translateY(calc(-50% + 30px)); width: min(34rem, calc(100vw - 2 * var(--gut))); display: flex; flex-direction: column; gap: 20px; opacity: 0; transition: opacity 0.7s var(--ease), transform 0.9s var(--ease); pointer-events: none; color: var(--cream); }
@@ -146,14 +147,21 @@ html.no-gl .hero > .hero-still { display: block; }
 .progress li.on { color: var(--sage-lt); }
 .progress li.on::after { width: 38px; }
 @media (max-width: 760px) {
-  .chapter { top: auto; bottom: 6vh; transform: translateY(30px); gap: 14px; }
+  .chapter { top: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 3svh); max-height: calc(100svh - 92px); transform: translateY(30px); gap: 12px; }
+  .chapter::before { content: ""; position: absolute; z-index: -1; left: calc(-1 * var(--gut)); right: calc(-1 * var(--gut)); top: -56px; bottom: -40px; background: linear-gradient(rgb(24 29 49 / 0), rgb(24 29 49 / 0.82) 56px); }
   .chapter.on { transform: none; }
-  .chapter p { font-size: 15px; }
-  .study li { grid-template-columns: 5rem 1fr; padding: 11px 0; }
+  .chapter h2 { font-size: clamp(34px, 10vw, 44px); }
+  .chapter p { font-size: 15px; line-height: 1.45; }
+  .study li { grid-template-columns: 4.6rem 1fr; gap: 12px; padding: 9px 0; }
+  .study time { font-size: 17px; }
+  .study b { font-size: 15px; }
+  .study span { font-size: 13px; }
   .certs { grid-template-columns: 1fr 1fr; gap: 6px; }
-  .cert { padding: 9px 10px; gap: 4px; }
-  .cert b { font-size: 17px; }
-  .cert span { font-size: 10px; letter-spacing: 0.05em; }
+  .cert { padding: 8px 10px; gap: 3px; }
+  .cert b { font-size: 16px; }
+  .cert span { font-size: 9.5px; letter-spacing: 0.04em; line-height: 1.3; }
+  .tags { gap: 5px; }
+  .tags li { font-size: 10px; padding: 4px 7px; }
   .progress { display: none; }
   .thought { font-size: 18px; white-space: normal; width: 80vw; }
 }
@@ -256,6 +264,7 @@ html.no-gl .hero > .hero-still { display: block; }
   <p>Loading the mind</p>
 </div>
 
+<div class="vh-probe" id="vhProbe" aria-hidden="true"></div>
 <canvas id="gl" aria-hidden="true"></canvas>
 
 <header class="nav">
@@ -478,7 +487,7 @@ const MEMORIES = [
     points: ["Built Java features with clean-code practice.", "Unit tests with Mockito, integration tests with Cucumber.", "CI/CD with Jenkins; production issues followed through with stakeholders.", "Scrum every day: planning, dailies, demos, retros."] },
   { year: "2023", when: "Jul 2023 — Aug 2024", role: "Product owner / functional analyst", place: "Capgemini · Spain", motif: "kanban",
     points: ["Validated work against functional requirements with the tech teams.", "API testing with Postman; log validation with Kafka.", "Feature presentations to audiences of 250+ people.", "Requirements and documentation written entirely in French; direct client liaison."] },
-  { year: "2024", when: "Jan 2024 — now", role: "Business analyst (intern)", place: "Oeson · Ireland", motif: "dash",
+  { year: "2024", when: "Jan 2024 — now", role: "Business analyst", place: "Oeson · Ireland", motif: "dash",
     points: ["Descriptive and inferential statistics in Python.", "Interactive Tableau dashboards for data-driven decisions.", "Advanced Excel for cleaning, formatting and visualisation.", "KPI definition and continuous-improvement projects."] },
   { year: "2026", when: "Next", role: "Product owner", place: "Technical product · open to roles", motif: "orbit", future: true,
     points: ["Owning a product end to end, with a technical core.", "Turning business goals into requirements teams can build — and products people use."] },
@@ -645,7 +654,7 @@ const updateUI = () => {
   document.body.dataset.tone = state.dark > 0.5 ? "dark" : "light";
   if (!scene3d) document.documentElement.style.background = state.dark > 0.5 ? "#181D31" : "#F0E9D2";
   thought.classList.toggle("on", state.q > 0.08 && state.q < 0.4);
-  const ch = state.q >= 0.62 && state.q < 0.76 ? 0 : state.q >= 0.76 && state.q < 0.88 ? 1 : state.q >= 0.88 && state.m < 0.08 ? 2 : -1;
+  const ch = state.q >= 0.62 && state.q < 0.76 ? 0 : state.q >= 0.76 && state.q < 0.88 ? 1 : state.q >= 0.88 && state.q < 0.975 ? 2 : -1;
   chapters.forEach((c, i) => c.classList.toggle("on", i === ch));
   prog.forEach((p, i) => p.classList.toggle("on", i === ch));
   progBox.classList.toggle("on", ch >= 0);
@@ -1281,8 +1290,13 @@ const buildScene = (THREE) => {
 
   // ================================================================ framing
   let aspect = 1, heroDist = 3, heroLookY = 0;
+  const vhProbe = $("#vhProbe");
+  let sizedW = 0, sizedH = 0;
   const resize = () => {
-    const w = innerWidth, h = innerHeight;
+    // phones: size to the large viewport so the toolbar sliding in/out doesn't resize the stage
+    const w = innerWidth, h = COARSE ? Math.max(innerHeight, vhProbe?.offsetHeight || 0) : innerHeight;
+    if (w === sizedW && h === sizedH) return;
+    sizedW = w; sizedH = h;
     aspect = w / h;
     renderer.setSize(w, h, false);
     camera.aspect = aspect; camera.updateProjectionMatrix();
@@ -1370,13 +1384,14 @@ const buildScene = (THREE) => {
       const scale = lerp(0.09, 1, grow);
       brain.scale.setScalar(scale);
       brain.position.set(0, 0, 0);
-      let D = lerp(0.6, 2.5, grow);
-      if (q >= 0.67) D = lerp(2.5, 2.2, clamp01((q - 0.67) / 0.33));
+      const fitK = Math.max(1, 1.08 / aspect); // portrait phones: back off so the whole brain fits the width
+      let D = lerp(0.6, 2.5 * fitK, grow);
+      if (q >= 0.67) D = lerp(2.5 * fitK, 2.2 * fitK, clamp01((q - 0.67) / 0.33));
       const dive = clamp01(m / 0.85);
-      if (m > 0) D = lerp(2.2, -1.1, easeInOut(dive));
+      if (m > 0) D = lerp(2.2 * fitK, -1.1, easeInOut(dive));
       if (e > 0) D = -1.1 - e * 0.6;
       const side = aspect >= 0.85 ? -0.95 * (1 - dive) * smooth(0.6, 0.7, q) : 0;
-      const lift = aspect < 0.85 ? -0.42 * (1 - dive) * smooth(0.6, 0.7, q) : 0;
+      const lift = aspect < 0.85 ? -0.27 * fitK * (1 - dive) * smooth(0.6, 0.7, q) : 0;
       camera.position.set(side + Math.sin(t * 0.2) * 0.04 * dive, 0.08 + lift, D);
       look.set(side, 0.04 + lift, D - 1);
       brain.rotation.y = t * 0.08 + q * 1.2 + neuro.ty;
