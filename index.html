@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F0E9D2">
 <title>Herenia Sarabia</title>
 <meta name="description" content="Herenia Sarabia — business analyst and product owner. A scroll from a floating mind into its memories.">
@@ -43,7 +43,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .up { text-transform: uppercase; }
 
 /* ---------- stage ---------- */
-#gl { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; z-index: 0; }
+#gl { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; height: 100lvh; display: block; z-index: 0; }
+.vh-probe { position: fixed; left: 0; top: 0; width: 1px; height: 100vh; height: 100lvh; visibility: hidden; pointer-events: none; }
 main { position: relative; z-index: 1; }
 .load-error { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 100; background: #b5532c; color: #fff; padding: 12px 16px; font: 500 14px/1.35 var(--font-sans); text-transform: uppercase; overflow-wrap: anywhere; }
 
@@ -98,23 +99,49 @@ body[data-tone="dark"] .nav::before { background: linear-gradient(rgb(24 29 49 /
 .socials { justify-self: end; display: flex; gap: 22px; }
 .socials a:hover { color: var(--sage); }
 @keyframes pulse { 50% { transform: scale(0.55); opacity: 0.6; } }
+/* still illustration of the figure, shown only when the 3D scene can't run */
+.hero > * { position: relative; z-index: 1; }
+.hero > .hero-still { display: none; position: absolute; z-index: 0; left: 50%; top: 50%; width: min(40vw, 420px); transform: translate(-50%, -48%); pointer-events: none; }
+html.no-gl .hero > .hero-still { display: block; }
+.hero-still svg { width: 100%; height: auto; display: block; overflow: visible; }
+.hero-still .bob-a { animation: bob 5.5s ease-in-out infinite; }
+.hero-still .bob-b { animation: bob 6.5s ease-in-out -2s infinite; }
+@keyframes bob { 50% { transform: translateY(-8px); } }
 @keyframes drip { from { top: -14px; } to { top: 46px; } }
 @media (max-width: 760px) {
   .hero { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; padding-top: 84px; }
   .hero-id { align-self: start; gap: 14px; }
   .hero-lead { font-size: 15px; }
   .hero-side { display: none; }
+  .hero > .hero-still { top: auto; bottom: 72px; width: min(76vw, 340px); transform: translateX(-50%); }
   .hero-foot { grid-template-columns: 1fr auto; }
   .hero-foot .socials { display: none; }
 }
 
 /* ---------- 2 · inside the mind (pinned) ---------- */
 .mind { position: relative; height: 420vh; }
-.pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 .thought { position: absolute; left: 50%; bottom: 12vh; transform: translateX(-50%); text-align: center; font-family: var(--font-display); text-transform: uppercase; font-size: clamp(20px, 2.2vw, 30px); letter-spacing: 0.04em; color: var(--navy); opacity: 0; transition: opacity 0.6s var(--ease); white-space: nowrap; }
 .thought.on { opacity: 1; }
 .chapter { position: absolute; left: var(--gut); top: 50%; transform: translateY(calc(-50% + 30px)); width: min(34rem, calc(100vw - 2 * var(--gut))); display: flex; flex-direction: column; gap: 20px; opacity: 0; transition: opacity 0.7s var(--ease), transform 0.9s var(--ease); pointer-events: none; color: var(--cream); }
 .chapter.on { opacity: 1; transform: translateY(-50%); pointer-events: auto; }
+/* chapter change: each line rises in turn; the heading wipes up */
+.chapter > * { opacity: 0; transform: translateY(22px); transition: opacity 0.5s var(--ease), transform 0.7s var(--ease); }
+.chapter.on > * { opacity: 1; transform: none; transition-duration: 0.8s, 1s; }
+.chapter.on > :nth-child(2) { transition-delay: 0.1s; }
+.chapter.on > :nth-child(3) { transition-delay: 0.22s; }
+.chapter.on > :nth-child(4) { transition-delay: 0.34s; }
+.chapter h2 { clip-path: inset(0 0 100% 0); transition: clip-path 0.5s var(--ease), opacity 0.5s, transform 0.7s var(--ease) !important; }
+.chapter.on h2 { clip-path: inset(-10% -10% -20% -10%); transition: clip-path 1.1s var(--ease) 0.08s, opacity 0.8s 0.08s, transform 1s var(--ease) 0.08s !important; }
+.study li, .cert { opacity: 0; transform: translateY(14px); transition: opacity 0.4s, transform 0.6s var(--ease); }
+.chapter.on .study li, .chapter.on .cert { opacity: 1; transform: none; transition-duration: 0.7s, 0.9s; }
+.chapter.on :is(.study li, .cert):nth-child(1) { transition-delay: 0.3s; }
+.chapter.on :is(.study li, .cert):nth-child(2) { transition-delay: 0.38s; }
+.chapter.on :is(.study li, .cert):nth-child(3) { transition-delay: 0.46s; }
+.chapter.on :is(.study li, .cert):nth-child(4) { transition-delay: 0.54s; }
+.chapter.on :is(.study li, .cert):nth-child(5) { transition-delay: 0.62s; }
+.chapter.on :is(.study li, .cert):nth-child(6) { transition-delay: 0.7s; }
+.chapter.on :is(.study li, .cert):nth-child(7) { transition-delay: 0.78s; }
 .chapter h2 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; font-size: clamp(44px, 5.4vw, 88px); line-height: 0.92; color: var(--cream); }
 .chapter h2 em { font-style: normal; color: var(--sage-lt); }
 .chapter p { font-size: 17px; line-height: 1.5; color: rgb(240 233 210 / 0.86); }
@@ -137,14 +164,29 @@ body[data-tone="dark"] .nav::before { background: linear-gradient(rgb(24 29 49 /
 .progress li.on { color: var(--sage-lt); }
 .progress li.on::after { width: 38px; }
 @media (max-width: 760px) {
-  .chapter { top: auto; bottom: 6vh; transform: translateY(30px); gap: 14px; }
+  .chapter { top: 40svh; bottom: calc(env(safe-area-inset-bottom, 0px) + 2svh); left: var(--gut); right: var(--gut); width: auto; justify-content: center; text-align: center; transform: translateY(30px); gap: 12px; }
+  .chapter[data-ch="2"] { top: 112px; }
+  .chapter .study, .chapter .certs, .chapter .tags { text-align: left; }
+  .chapter .tags { justify-content: center; }
+  .progress { display: flex !important; position: absolute; left: 50%; right: auto; top: 78px; transform: translateX(-50%); flex-direction: row; gap: 14px; font-size: 10px; letter-spacing: 0.18em; opacity: 0; transition: opacity 0.6s; color: rgb(240 233 210 / 0.45); z-index: 2; }
+  .progress.on { opacity: 1; }
+  .progress li { flex-direction: column-reverse; gap: 6px; }
+  .progress li::after { width: 30px; height: 2px; }
+  .progress li.on::after { width: 30px; background: var(--sage-lt); }
+  .chapter::before { content: ""; position: absolute; z-index: -1; left: calc(-1 * var(--gut)); right: calc(-1 * var(--gut)); top: -56px; bottom: -40px; background: linear-gradient(rgb(24 29 49 / 0), rgb(24 29 49 / 0.82) 56px); }
   .chapter.on { transform: none; }
-  .chapter p { font-size: 15px; }
-  .study li { grid-template-columns: 5rem 1fr; padding: 11px 0; }
+  .chapter h2 { font-size: clamp(34px, 10vw, 44px); }
+  .chapter p { font-size: 15px; line-height: 1.45; }
+  .study li { grid-template-columns: 4.6rem 1fr; gap: 12px; padding: 9px 0; }
+  .study time { font-size: 17px; }
+  .study b { font-size: 15px; }
+  .study span { font-size: 13px; }
   .certs { grid-template-columns: 1fr 1fr; gap: 6px; }
-  .cert { padding: 9px 10px; gap: 4px; }
-  .cert b { font-size: 17px; }
-  .cert span { font-size: 10px; letter-spacing: 0.05em; }
+  .cert { padding: 8px 10px; gap: 3px; }
+  .cert b { font-size: 16px; }
+  .cert span { font-size: 9.5px; letter-spacing: 0.04em; line-height: 1.3; }
+  .tags { gap: 5px; }
+  .tags li { font-size: 10px; padding: 4px 7px; }
   .progress { display: none; }
   .thought { font-size: 18px; white-space: normal; width: 80vw; }
 }
@@ -234,6 +276,7 @@ body[data-tone="dark"] .nav::before { background: linear-gradient(rgb(24 29 49 /
 .union-foot { position: absolute; left: var(--gut); right: var(--gut); bottom: 22px; display: flex; justify-content: space-between; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: rgb(24 29 49 / 0.55); }
 @media (max-width: 760px) { .union-copy { margin-top: 26vh; } .union-foot { flex-direction: column; gap: 6px; align-items: center; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; } }
+@media (prefers-reduced-motion: reduce) { .chapter h2, .chapter.on h2 { transition: none !important; clip-path: none; } }
 </style>
 </head>
 <body>
@@ -247,6 +290,7 @@ body[data-tone="dark"] .nav::before { background: linear-gradient(rgb(24 29 49 /
   <p>Loading the mind</p>
 </div>
 
+<div class="vh-probe" id="vhProbe" aria-hidden="true"></div>
 <canvas id="gl" aria-hidden="true"></canvas>
 
 <header class="nav">
@@ -281,6 +325,43 @@ body[data-tone="dark"] .nav::before { background: linear-gradient(rgb(24 29 49 /
       <div class="chip"><small>Now</small><b>Business analyst</b><span>Oeson · since 2024</span></div>
       <div class="chip"><small>Next mission</small><b>Product owner</b><span>Technical product · 2026</span></div>
     </aside>
+    <div class="hero-still" aria-hidden="true">
+      <svg viewBox="0 0 400 430">
+        <defs><linearGradient id="hairG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a281e"/><stop offset="0.45" stop-color="#7a5535"/><stop offset="1" stop-color="#dcbd8a"/></linearGradient></defs>
+        <ellipse cx="200" cy="300" rx="196" ry="44" fill="none" stroke="#678983" stroke-opacity=".55"/>
+        <ellipse cx="200" cy="300" rx="160" ry="34" fill="none" stroke="#181D31" stroke-opacity=".2"/>
+        <ellipse cx="200" cy="418" rx="120" ry="9" fill="#181D31" opacity=".12"/>
+        <path d="M148 98 Q140 160 118 240 Q132 252 150 246 L250 246 Q268 252 282 240 Q260 160 252 98 Z" fill="url(#hairG)"/>
+        <path d="M66 338 Q120 286 200 298 Q280 286 334 338 Q300 374 200 370 Q100 374 66 338 Z" fill="#6e1e30"/>
+        <path d="M132 352 Q160 340 182 352 Q160 362 132 352 Z M218 348 Q240 336 270 346 Q244 358 218 348 Z" fill="#4d1522"/>
+        <path d="M140 152 Q200 138 260 152 L264 214 Q258 266 252 316 L148 316 Q142 266 136 214 Z" fill="#6e1e30"/>
+        <path d="M181 152 L219 152 L200 232 Z" fill="#f4efe6"/>
+        <path d="M196 156 L204 156 L206 224 L200 232 L194 224 Z" fill="#d9cfd6"/>
+        <path d="M176 150 L200 236 L188 240 L162 160 Z M224 150 L200 236 L212 240 L238 160 Z" fill="#4d1522"/>
+        <g fill="#241619"><circle cx="190" cy="256" r="3"/><circle cx="210" cy="256" r="3"/><circle cx="190" cy="276" r="3"/><circle cx="210" cy="276" r="3"/></g>
+        <path d="M142 156 Q112 202 108 262 Q104 300 92 320 L114 330 Q128 300 132 262 Q138 214 160 182 Z M258 156 Q288 202 292 262 Q296 300 308 320 L286 330 Q272 300 268 262 Q262 214 240 182 Z" fill="#6e1e30"/>
+        <path d="M90 318 L114 328 L111 336 L87 326 Z M310 318 L286 328 L289 336 L313 326 Z" fill="#f4efe6"/>
+        <ellipse cx="96" cy="338" rx="12" ry="7" fill="#e9c4a7"/><ellipse cx="304" cy="338" rx="12" ry="7" fill="#e9c4a7"/>
+        <rect x="190" y="118" width="20" height="36" fill="#e9c4a7"/>
+        <ellipse cx="200" cy="98" rx="34" ry="42" fill="#e9c4a7"/>
+        <path d="M164 104 Q158 54 200 50 Q242 54 236 104 Q232 72 200 68 Q168 72 164 104 Z" fill="#4a3324"/>
+        <path d="M166 92 Q150 150 158 214 L170 208 Q164 150 172 100 Z M234 92 Q250 150 242 214 L230 208 Q236 150 228 100 Z" fill="url(#hairG)"/>
+        <g fill="#1d1517" stroke="#c7a46a" stroke-width="1.2"><rect x="176" y="90" width="21" height="12" rx="4"/><rect x="203" y="90" width="21" height="12" rx="4"/></g>
+        <path d="M197 94 L203 94" stroke="#c7a46a" stroke-width="1.2"/>
+        <ellipse cx="200" cy="124" rx="7" ry="2.6" fill="#b8616a"/>
+        <g class="bob-a">
+          <path d="M300 232 L372 222 L390 240 L316 252 Z" fill="#d9ccc9"/>
+          <path d="M300 232 L310 168 L382 160 L372 222 Z" fill="#cfc1be"/>
+          <path d="M305 226 L313 173 L376 166 L368 218 Z" fill="#181D31"/>
+          <path d="M318 182 L340 179 M318 192 L360 187 M318 202 L350 198" stroke="#9fbdb7" stroke-width="3"/>
+        </g>
+        <g class="bob-b">
+          <path d="M38 214 L74 214 L69 268 L43 268 Z" fill="#ecc9cf"/>
+          <path d="M40 232 L72 232 L70 250 L42 250 Z" fill="#F0E9D2"/>
+          <rect x="34" y="204" width="44" height="11" rx="3" fill="#f7f3ec"/>
+        </g>
+      </svg>
+    </div>
     <div class="hero-foot fade">
       <p class="hint"><i aria-hidden="true"></i><span>Move the cursor · meet the machine</span></p>
       <a class="scrollcue" href="#mind"><span>Scroll · enter the mind</span><i aria-hidden="true"></i></a>
@@ -363,6 +444,7 @@ body[data-tone="dark"] .nav::before { background: linear-gradient(rgb(24 29 49 /
   setTimeout(function () {
     if (window.__booted) return;
     var v = document.getElementById("veil"); if (v) v.classList.add("out");
+    document.documentElement.classList.add("no-gl");
     var b = document.createElement("div"); b.className = "load-error"; b.setAttribute("role", "alert");
     b.textContent = "The 3D scene did not start: https://cdn.jsdelivr.net (three.js) could not be reached.";
     document.body.appendChild(b);
@@ -381,6 +463,8 @@ const TUNE = {
   particlesMobile: 4200,   // número de partículas del cerebro en móvil
   tilt: 10,                // grados que se inclina el cerebro siguiendo el ratón
   cardPulseMs: 900,        // duración del pulso extra al pasar el ratón por una tarjeta
+  suitColor: "#6e1e30",    // color del traje (burdeos)
+  propsFloat: 1.0,         // cuánto flotan el portátil y la taza (0 = quietos)
 };
 window.__booted = true;
 const $ = (s, r = document) => r.querySelector(s);
@@ -429,7 +513,7 @@ const MEMORIES = [
     points: ["Built Java features with clean-code practice.", "Unit tests with Mockito, integration tests with Cucumber.", "CI/CD with Jenkins; production issues followed through with stakeholders.", "Scrum every day: planning, dailies, demos, retros."] },
   { year: "2023", when: "Jul 2023 — Aug 2024", role: "Product owner / functional analyst", place: "Capgemini · Spain", motif: "kanban",
     points: ["Validated work against functional requirements with the tech teams.", "API testing with Postman; log validation with Kafka.", "Feature presentations to audiences of 250+ people.", "Requirements and documentation written entirely in French; direct client liaison."] },
-  { year: "2024", when: "Jan 2024 — now", role: "Business analyst (intern)", place: "Oeson · Ireland", motif: "dash",
+  { year: "2024", when: "Jan 2024 — now", role: "Business analyst", place: "Oeson · Ireland", motif: "dash",
     points: ["Descriptive and inferential statistics in Python.", "Interactive Tableau dashboards for data-driven decisions.", "Advanced Excel for cleaning, formatting and visualisation.", "KPI definition and continuous-improvement projects."] },
   { year: "2026", when: "Next", role: "Product owner", place: "Technical product · open to roles", motif: "orbit", future: true,
     points: ["Owning a product end to end, with a technical core.", "Turning business goals into requirements teams can build — and products people use."] },
@@ -592,11 +676,13 @@ const readScroll = () => {
   state.dark = smooth(0.44, 0.56, state.q) * (1 - smooth(0.2, 0.68, state.e));
 };
 const thought = $("#thought"), chapters = $$(".chapter"), prog = $$("#mindProgress li"), progBox = $("#mindProgress"), union = $("#contact");
+let lastCh = -1;
 const updateUI = () => {
   document.body.dataset.tone = state.dark > 0.5 ? "dark" : "light";
   if (!scene3d) document.documentElement.style.background = state.dark > 0.5 ? "#181D31" : "#F0E9D2";
   thought.classList.toggle("on", state.q > 0.08 && state.q < 0.4);
-  const ch = state.q >= 0.62 && state.q < 0.76 ? 0 : state.q >= 0.76 && state.q < 0.88 ? 1 : state.q >= 0.88 && state.m < 0.08 ? 2 : -1;
+  const ch = state.q >= 0.62 && state.q < 0.76 ? 0 : state.q >= 0.76 && state.q < 0.88 ? 1 : state.q >= 0.88 && state.q < 0.975 ? 2 : -1;
+  if (ch !== lastCh) { if (ch >= 0) scene3d?.burst?.(); lastCh = ch; }
   chapters.forEach((c, i) => c.classList.toggle("on", i === ch));
   prog.forEach((p, i) => p.classList.toggle("on", i === ch));
   progBox.classList.toggle("on", ch >= 0);
@@ -795,20 +881,62 @@ const buildScene = (THREE) => {
   const girlRoot = new THREE.Group(); scene.add(girlRoot);
   const girl = new THREE.Group(); girlRoot.add(girl);
   const skin = robotMaterial({ color: C("#e9c4a7"), roughness: 0.62 });
-  const top = robotMaterial({ color: C("#678983"), roughness: 0.78 });
-  const legs = robotMaterial({ color: C("#283049"), roughness: 0.7 });
+  const suit = robotMaterial({ color: C(TUNE.suitColor), roughness: 0.6, side: THREE.DoubleSide });
+  const suitDeep = robotMaterial({ color: C(TUNE.suitColor).multiplyScalar(0.7), roughness: 0.5, side: THREE.DoubleSide });
+  const shirt = robotMaterial({ color: C("#f4efe6"), roughness: 0.72, side: THREE.DoubleSide });
+  const stripeTex = (() => {
+    const c = document.createElement("canvas"); c.width = c.height = 64; const x = c.getContext("2d");
+    x.fillStyle = "#efe8e4"; x.fillRect(0, 0, 64, 64);
+    x.strokeStyle = TUNE.suitColor; x.lineWidth = 5;
+    for (let i = -64; i < 128; i += 16) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i + 64, 64); x.stroke(); }
+    const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; return t;
+  })();
+  const tieM = robotMaterial({ color: 0xffffff, map: stripeTex, roughness: 0.5, side: THREE.DoubleSide });
+  const buttonM = robotMaterial({ color: C("#241619"), roughness: 0.35, metalness: 0.2 });
   const hairM = robotMaterial({ color: 0xffffff, vertexColors: true, roughness: 0.48, side: THREE.DoubleSide });
   const feature = robotMaterial({ color: C("#3b2a22"), roughness: 0.6, glow: true });
-  const lipsM = robotMaterial({ color: C("#c98d84"), roughness: 0.5 });
+  const lipsM = robotMaterial({ color: C("#b8616a"), roughness: 0.45 });
 
-  // torso: hips in leggings, chest in the sage top
+  // torso: wide trousers at the hips, a double-breasted blazer above
   const lathe = (pts, mat) => { const g = new THREE.LatheGeometry(pts.map(([r, y]) => new THREE.Vector2(r, y)), 56); g.scale(1, 1, 0.68); const m = new THREE.Mesh(g, mat); girl.add(m); return m; };
-  lathe([[0.001, 0.07], [0.12, 0.075], [0.163, 0.12], [0.16, 0.2], [0.14, 0.28], [0.132, 0.32]], legs);
-  lathe([[0.132, 0.3], [0.13, 0.36], [0.143, 0.45], [0.16, 0.52], [0.166, 0.58], [0.15, 0.635], [0.1, 0.675], [0.04, 0.69], [0.001, 0.692]], top);
-  ellipsoid(girl, top, [0.06, 0.485, 0.068], [0.05, 0.044, 0.04]);
-  ellipsoid(girl, top, [-0.06, 0.485, 0.068], [0.05, 0.044, 0.04]);
-  ellipsoid(girl, skin, [0.158, 0.62, 0], [0.052, 0.045, 0.05]);
-  ellipsoid(girl, skin, [-0.158, 0.62, 0], [0.052, 0.045, 0.05]);
+  const CHEST = [[0.132, 0.3], [0.13, 0.36], [0.143, 0.45], [0.16, 0.52], [0.166, 0.58], [0.15, 0.635], [0.1, 0.675], [0.04, 0.69], [0.001, 0.692]];
+  lathe([[0.001, 0.07], [0.12, 0.075], [0.163, 0.12], [0.16, 0.2], [0.14, 0.28], [0.132, 0.32]], suit);
+  lathe(CHEST, suit);
+  lathe([[0.176, 0.12], [0.178, 0.19], [0.162, 0.28], [0.137, 0.36]], suit); // blazer skirt over the hips
+  const BUST = [[0.06, 0.485, 0.068], [-0.06, 0.485, 0.068]];
+  for (const b of BUST) ellipsoid(girl, suit, b, [0.05, 0.044, 0.04]);
+  ellipsoid(girl, suit, [0.162, 0.618, 0], [0.062, 0.05, 0.058]); // padded shoulders
+  ellipsoid(girl, suit, [-0.162, 0.618, 0], [0.062, 0.05, 0.058]);
+  // anything laid on the chest follows the blazer surface
+  const chestR = (y) => { for (let i = 0; i < CHEST.length - 1; i++) { const [r0, y0] = CHEST[i], [r1, y1] = CHEST[i + 1]; if (y <= y1) return lerp(r0, r1, clamp01((y - y0) / (y1 - y0))); } return 0; };
+  const chestZ = (x, y) => {
+    let z = Math.sqrt(Math.max(0, chestR(y) ** 2 - x * x)) * 0.68;
+    for (const [bx, by, bz] of BUST) { const d = 1 - ((x - bx) / 0.05) ** 2 - ((y - by) / 0.044) ** 2; if (d > 0) z = Math.max(z, bz + 0.04 * Math.sqrt(d)); }
+    return z;
+  };
+  const chestPatch = (mat, fn, lift, nu = 14, nv = 6) => {
+    const pos = [], uv = [], idx = [];
+    for (let i = 0; i <= nu; i++) for (let j = 0; j <= nv; j++) { const [x, y] = fn(i / nu, j / nv); pos.push(x, y, chestZ(x, y) + lift); uv.push(x * 7, y * 7); }
+    for (let i = 0; i < nu; i++) for (let j = 0; j < nv; j++) { const a = i * (nv + 1) + j, b = a + nv + 1; idx.push(a, b, a + 1, b, b + 1, a + 1); }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+    g.setIndex(idx); g.computeVertexNormals(); girl.add(new THREE.Mesh(g, mat));
+  };
+  const V_TOP = 0.66, V_BOT = 0.465;
+  chestPatch(shirt, (u, v) => { const y = lerp(V_TOP, V_BOT, u), w = 0.05 * (1 - u); return [(v * 2 - 1) * w, y]; }, 0.003);
+  chestPatch(tieM, (u, v) => {
+    const y = lerp(0.652, 0.47, u);
+    const w = u < 0.12 ? lerp(0.013, 0.008, u / 0.12) : 0.006 + 0.007 * ((u - 0.12) / 0.88);
+    return [(v * 2 - 1) * w, y];
+  }, 0.007, 16, 4);
+  for (const sd of [1, -1]) {
+    chestPatch(suitDeep, (u, v) => { const y = lerp(V_TOP, V_BOT - 0.004, u), xin = 0.05 * (1 - u), xout = xin + 0.036 * (1 - 0.5 * u); return [sd * lerp(xin, xout, v), y]; }, 0.005);
+    chestPatch(shirt, (u, v) => { const y = lerp(0.662, 0.632, u); return [sd * lerp(0.022, 0.05 - u * 0.012, v), y]; }, 0.009, 4, 4); // collar point
+    for (const by of [0.415, 0.37]) {
+      const x = sd * 0.036, bt = new THREE.Mesh(new THREE.SphereGeometry(0.0075, 12, 8), buttonM);
+      bt.scale.z = 0.45; bt.position.set(x, by, chestZ(x, by) + 0.003); girl.add(bt);
+    }
+  }
   limb(girl, skin, [[0, 0.66, 0], [0, 0.73, 0.012], [0, 0.79, 0.03]], [0.043, 0.04, 0.038], false);
 
   // head, tilted down, eyes closed
@@ -823,6 +951,25 @@ const buildScene = (THREE) => {
     eye.position.set(s * 0.035, 0.008, 0.087); eye.rotation.set(-0.15, s * 0.32, Math.PI); head.add(eye);
     const brow = new THREE.Mesh(new THREE.TorusGeometry(0.024, 0.0022, 6, 18, Math.PI * 0.7), feature);
     brow.position.set(s * 0.036, 0.022, 0.088); brow.rotation.set(-0.1, s * 0.3, Math.PI * 0.15); head.add(brow);
+  }
+  // sunglasses
+  {
+    const lensM = new THREE.MeshStandardMaterial({ color: C("#1d1517"), metalness: 0.55, roughness: 0.1 });
+    const frameM = new THREE.MeshStandardMaterial({ color: C("#c7a46a"), metalness: 0.9, roughness: 0.28 });
+    const rounded = (w, h, r) => { const sh = new THREE.Shape(), x = -w / 2, y = -h / 2;
+      sh.moveTo(x + r, y); sh.lineTo(x + w - r, y); sh.quadraticCurveTo(x + w, y, x + w, y + r); sh.lineTo(x + w, y + h - r); sh.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      sh.lineTo(x + r, y + h); sh.quadraticCurveTo(x, y + h, x, y + h - r); sh.lineTo(x, y + r); sh.quadraticCurveTo(x, y, x + r, y); return sh; };
+    const lensG = new THREE.ExtrudeGeometry(rounded(0.04, 0.022, 0.007), { depth: 0.002, bevelEnabled: false, curveSegments: 6 });
+    const rimG = new THREE.ExtrudeGeometry(rounded(0.044, 0.026, 0.009), { depth: 0.0015, bevelEnabled: false, curveSegments: 6 });
+    for (const sd of [1, -1]) {
+      const g = new THREE.Group(); g.position.set(sd * 0.037, 0.006, 0.098); g.rotation.set(0.05, sd * 0.24, 0); head.add(g);
+      const rim = new THREE.Mesh(rimG, frameM); rim.position.z = -0.001; g.add(rim);
+      g.add(new THREE.Mesh(lensG, lensM));
+      const arm = new THREE.Mesh(new THREE.BoxGeometry(0.0025, 0.0025, 0.1), frameM);
+      arm.position.set(sd * 0.072, 0.012, 0.05); arm.rotation.y = sd * -0.1; head.add(arm);
+    }
+    const bridge = new THREE.Mesh(new THREE.CylinderGeometry(0.0016, 0.0016, 0.018, 8), frameM);
+    bridge.rotation.z = Math.PI / 2; bridge.position.set(0, 0.012, 0.104); head.add(bridge);
   }
   // hair: crown, sides/back cap, long balayage curtain, two front strands
   {
@@ -840,7 +987,7 @@ const buildScene = (THREE) => {
       const v = r / rows, th = -1.78 + (c / cols) * 3.56;
       const y = 0.95 - v * 0.64;
       const cz = 0.055 - v * 0.09;
-      let R = 0.104 + 0.072 * smooth(0, 0.35, v) + 0.018 * v + 0.009 * Math.sin(th * 11 + v * 9) + 0.005 * Math.sin(th * 23 + 1.3);
+      let R = 0.104 + 0.078 * smooth(0, 0.35, v) + 0.022 * v + 0.013 * Math.sin(th * 11 + v * 9) * (0.4 + v) + 0.006 * Math.sin(th * 23 + 1.3) + 0.01 * v * Math.sin(v * 16 + th * 3);
       R *= 1 - 0.12 * smooth(0.8, 1, v) * Math.abs(Math.sin(th * 3));
       pos.push(Math.sin(th) * R * 1.12, y - 0.02 * Math.sin(th * 5) * v, cz - Math.cos(th) * R * 0.9);
       const hc = hairColor(0.12 + v * 0.9, th); colr.push(hc.r, hc.g, hc.b);
@@ -859,16 +1006,62 @@ const buildScene = (THREE) => {
   }
   // arms resting on the knees, hands in a mudra
   for (const s of [1, -1]) {
-    limb(girl, skin, [[s * 0.172, 0.615, 0], [s * 0.235, 0.47, 0.02], [s * 0.255, 0.37, 0.045], [s * 0.29, 0.25, 0.14], [s * 0.315, 0.18, 0.215]], [0.041, 0.037, 0.033, 0.029, 0.025]);
+    limb(girl, suit, [[s * 0.172, 0.615, 0], [s * 0.235, 0.47, 0.02], [s * 0.255, 0.37, 0.045], [s * 0.286, 0.258, 0.132]], [0.05, 0.046, 0.042, 0.04], false);
+    limb(girl, shirt, [[s * 0.284, 0.262, 0.128], [s * 0.293, 0.24, 0.155]], [0.031, 0.03], false);
+    limb(girl, skin, [[s * 0.29, 0.25, 0.14], [s * 0.315, 0.18, 0.215]], [0.027, 0.025]);
     ellipsoid(girl, skin, [s * 0.33, 0.16, 0.262], [0.033, 0.016, 0.058], [0.2, s * -0.25, 0]);
     const mudra = new THREE.Mesh(new THREE.TorusGeometry(0.013, 0.0055, 8, 18), skin);
     mudra.position.set(s * 0.342, 0.175, 0.3); mudra.rotation.set(1.2, 0, 0); girl.add(mudra);
     // legs: thigh to knee, shin crossing to the opposite ankle
-    limb(girl, legs, [[s * 0.095, 0.1, 0.02], [s * 0.25, 0.09, 0.11], [s * 0.4, 0.075, 0.2]], [0.086, 0.074, 0.06]);
-    limb(girl, legs, [[s * 0.4, 0.075, 0.2], [s * 0.16, s > 0 ? 0.045 : 0.065, s > 0 ? 0.37 : 0.31], [s * -0.12, s > 0 ? 0.05 : 0.075, s > 0 ? 0.31 : 0.245]], [0.056, 0.047, 0.036]);
-    ellipsoid(girl, skin, [s * -0.17, s > 0 ? 0.052 : 0.077, s > 0 ? 0.29 : 0.225], [0.072, 0.03, 0.036], [0, s * 0.35, 0]);
+    // wide-leg trousers: thigh to knee, shin crossing to the opposite ankle
+    limb(girl, suit, [[s * 0.095, 0.1, 0.02], [s * 0.25, 0.09, 0.11], [s * 0.4, 0.075, 0.2]], [0.092, 0.082, 0.068]);
+    limb(girl, suit, [[s * 0.4, 0.075, 0.2], [s * 0.16, s > 0 ? 0.045 : 0.065, s > 0 ? 0.37 : 0.31], [s * -0.12, s > 0 ? 0.05 : 0.075, s > 0 ? 0.31 : 0.245]], [0.066, 0.062, 0.06]);
+    ellipsoid(girl, suitDeep, [s * -0.18, s > 0 ? 0.052 : 0.077, s > 0 ? 0.29 : 0.225], [0.08, 0.028, 0.032], [0, s * 0.35, 0]); // pointed shoes
   }
   const GIRL_CENTER = 0.5;
+
+  // floating props: a silver laptop on one side, a takeaway coffee on the other
+  const LAPTOP_Y = 0.46, CUP_Y = 0.5;
+  const laptop = new THREE.Group(); laptop.position.set(0.54, LAPTOP_Y, 0.1); laptop.rotation.set(0.18, -0.55, -0.08); girl.add(laptop);
+  {
+    const alu = new THREE.MeshStandardMaterial({ color: C("#d9ccc9"), metalness: 0.85, roughness: 0.3 });
+    const aluDark = new THREE.MeshStandardMaterial({ color: C("#bfb1ae"), metalness: 0.8, roughness: 0.38 });
+    const keys = new THREE.MeshStandardMaterial({ color: C("#2b2f3d"), roughness: 0.65 });
+    const screenTex = (() => {
+      const c = document.createElement("canvas"); c.width = 320; c.height = 200; const x = c.getContext("2d");
+      x.fillStyle = "#181D31"; x.fillRect(0, 0, 320, 200);
+      x.fillStyle = "#678983"; x.fillRect(0, 0, 320, 16);
+      for (let col = 0; col < 3; col++) {
+        const cx = 14 + col * 102;
+        x.fillStyle = "#9fbdb7"; x.fillRect(cx, 28, 40, 6);
+        for (let r = 0; r < 3 - (col === 2 ? 1 : 0); r++) {
+          x.fillStyle = "#2b3252"; x.fillRect(cx, 42 + r * 48, 90, 40);
+          x.fillStyle = r === 0 && col === 1 ? "#9fbdb7" : "#E6DDC4"; x.fillRect(cx + 8, 52 + r * 48, 54, 5);
+          x.fillStyle = "rgba(230,221,196,0.45)"; x.fillRect(cx + 8, 63 + r * 48, 70, 4);
+        }
+      }
+      const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+    })();
+    const screenM = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0xffffff, emissiveMap: screenTex, emissiveIntensity: 0.85, roughness: 0.2 });
+    const base = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.012, 0.18), alu); laptop.add(base);
+    const kb = new THREE.Mesh(new THREE.PlaneGeometry(0.22, 0.08), keys); kb.rotation.x = -Math.PI / 2; kb.position.set(0, 0.0065, -0.022); laptop.add(kb);
+    const pad = new THREE.Mesh(new THREE.PlaneGeometry(0.085, 0.05), aluDark); pad.rotation.x = -Math.PI / 2; pad.position.set(0, 0.0065, 0.05); laptop.add(pad);
+    const hinge = new THREE.Group(); hinge.position.set(0, 0.006, -0.09); hinge.rotation.x = -0.3; laptop.add(hinge);
+    const lid = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.17, 0.008), alu); lid.position.y = 0.085; hinge.add(lid);
+    const scr = new THREE.Mesh(new THREE.PlaneGeometry(0.236, 0.148), screenM); scr.position.set(0, 0.087, 0.0045); hinge.add(scr);
+  }
+  const cup = new THREE.Group(); cup.position.set(-0.52, CUP_Y, 0.12); cup.rotation.set(0.1, 0, 0.12); cup.scale.setScalar(1.3); girl.add(cup);
+  {
+    const paper = new THREE.MeshStandardMaterial({ color: C("#ecc9cf"), roughness: 0.6, side: THREE.DoubleSide });
+    const sleeveM = new THREE.MeshStandardMaterial({ color: C("#F0E9D2"), roughness: 0.75, side: THREE.DoubleSide });
+    const lidM = new THREE.MeshStandardMaterial({ color: C("#f7f3ec"), roughness: 0.45 });
+    cup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.032, 0.11, 36, 1, true), paper));
+    const bottom = new THREE.Mesh(new THREE.CircleGeometry(0.032, 28), paper); bottom.rotation.x = Math.PI / 2; bottom.position.y = -0.055; cup.add(bottom);
+    const band = new THREE.Mesh(new THREE.CylinderGeometry(0.0412, 0.0372, 0.042, 36, 1, true), sleeveM); band.position.y = -0.004; cup.add(band);
+    const lidA = new THREE.Mesh(new THREE.CylinderGeometry(0.046, 0.045, 0.012, 36), lidM); lidA.position.y = 0.059; cup.add(lidA);
+    const lidB = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.043, 0.012, 36), lidM); lidB.position.y = 0.071; cup.add(lidB);
+    const sip = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.003, 0.005), new THREE.MeshStandardMaterial({ color: 0x2a2224 })); sip.position.set(0, 0.0775, 0.022); cup.add(sip);
+  }
 
   // floating paraphernalia: two orbit rings, dust, a soft shadow
   const rings = [0.62, 0.78].map((r, i) => {
@@ -1125,17 +1318,22 @@ const buildScene = (THREE) => {
 
   // ================================================================ framing
   let aspect = 1, heroDist = 3, heroLookY = 0;
+  const vhProbe = $("#vhProbe");
+  let sizedW = 0, sizedH = 0;
   const resize = () => {
-    const w = innerWidth, h = innerHeight;
+    // phones: size to the large viewport so the toolbar sliding in/out doesn't resize the stage
+    const w = innerWidth, h = COARSE ? Math.max(innerHeight, vhProbe?.offsetHeight || 0) : innerHeight;
+    if (w === sizedW && h === sizedH) return;
+    sizedW = w; sizedH = h;
     aspect = w / h;
     renderer.setSize(w, h, false);
     camera.aspect = aspect; camera.updateProjectionMatrix();
     backMat.uniforms.uAspect.value = aspect;
     U.uAspect.value = aspect;
     const tanH = Math.tan((35 * Math.PI) / 360);
-    const needH = Math.max(1.95, 1.65 / aspect);
+    const needH = aspect < 0.85 ? 1.95 / aspect : Math.max(1.95, 1.65 / aspect); // phones: a little smaller, under the intro text
     heroDist = needH / (2 * tanH);
-    heroLookY = aspect < 0.85 ? 0.4 : 0;
+    heroLookY = aspect < 0.85 ? 0.78 : 0;
   };
   addEventListener("resize", resize);
   resize();
@@ -1156,10 +1354,11 @@ const buildScene = (THREE) => {
     const { q, m, e, f, dark } = state;
 
     // pointer smoothing + pace (touch: a slow wandering reveal)
-    if (COARSE || !ptr.seen) { ptr.x = 0.22 * Math.sin(t * 0.7); ptr.y = -0.05 + 0.25 * Math.sin(t * 0.53 + 1); }
+    // idle wander of the robot reveal (off with reduced motion: the figure stays human until the cursor moves)
+    if (!REDUCED && (COARSE || !ptr.seen)) { ptr.x = 0.22 * Math.sin(t * 0.7); ptr.y = -0.05 + 0.25 * Math.sin(t * 0.53 + 1); }
     ptr.sx += (ptr.x - ptr.sx) * 0.17; ptr.sy += (ptr.y - ptr.sy) * 0.17;
     const step = Math.hypot(ptr.sx - ptr.lx, ptr.sy - ptr.ly); ptr.lx = ptr.sx; ptr.ly = ptr.sy;
-    const want = COARSE ? 0.55 : Math.min(1, step / 0.029);
+    const want = COARSE ? (REDUCED ? 0 : 0.55) : Math.min(1, step / 0.029);
     ptr.pace += (want - ptr.pace) * (want > ptr.pace ? 0.09 : 0.205);
     const o = trail.pop(); o.set(ptr.sx, ptr.sy); trail.unshift(o);
     writeBounds();
@@ -1170,15 +1369,22 @@ const buildScene = (THREE) => {
     const zoom = easeInOut(clamp01(q / 0.42));
     if (q > 0.001 && latch === null) latch = Math.round(spin / (Math.PI * 2)) * Math.PI * 2;
     if (q <= 0.001) latch = null;
-    if (!REDUCED) spin += dt * 0.32 * (1 - zoom);
+    spin += dt * (REDUCED ? 0.1 : 0.32) * (1 - zoom); // reduced motion: a slow drift instead of a still
     const shownSpin = latch === null ? spin : lerp(spin, latch, easeInOut(clamp01(q / 0.32)));
     girl.rotation.y = shownSpin;
-    const bob = REDUCED ? 0 : Math.sin(t * 0.9) * 0.035 * (1 - zoom);
+    const bob = Math.sin(t * 0.9) * (REDUCED ? 0.012 : 0.035) * (1 - zoom);
     girlRoot.position.y = -GIRL_CENTER + 0.5 + bob;
     girl.position.y = -0.5;
     girl.rotation.z = Math.sin(t * 0.6) * 0.012 * (1 - zoom);
     rings[0].rotation.z += dt * 0.12; rings[1].rotation.z -= dt * 0.08;
     dust.rotation.y += dt * 0.05;
+    {
+      const fl = (REDUCED ? 0.35 : 1) * TUNE.propsFloat;
+      laptop.position.y = LAPTOP_Y + Math.sin(t * 1.05) * 0.024 * fl;
+      laptop.rotation.z = -0.08 + Math.sin(t * 0.8) * 0.05 * fl;
+      cup.position.y = CUP_Y + Math.sin(t * 1.25 + 1.7) * 0.022 * fl;
+      cup.rotation.y += dt * 0.35 * fl;
+    }
     shadow.scale.setScalar(1 - bob * 2.5);
     girlRoot.updateMatrixWorld(true);
     head.getWorldPosition(headW);
@@ -1206,13 +1412,14 @@ const buildScene = (THREE) => {
       const scale = lerp(0.09, 1, grow);
       brain.scale.setScalar(scale);
       brain.position.set(0, 0, 0);
-      let D = lerp(0.6, 2.5, grow);
-      if (q >= 0.67) D = lerp(2.5, 2.2, clamp01((q - 0.67) / 0.33));
+      const fitK = Math.max(1, 1.08 / aspect); // portrait phones: back off so the whole brain fits the width
+      let D = lerp(0.6, 2.5 * fitK, grow);
+      if (q >= 0.67) D = lerp(2.5 * fitK, 2.2 * fitK, clamp01((q - 0.67) / 0.33));
       const dive = clamp01(m / 0.85);
-      if (m > 0) D = lerp(2.2, -1.1, easeInOut(dive));
+      if (m > 0) D = lerp(2.2 * fitK, -1.1, easeInOut(dive));
       if (e > 0) D = -1.1 - e * 0.6;
       const side = aspect >= 0.85 ? -0.95 * (1 - dive) * smooth(0.6, 0.7, q) : 0;
-      const lift = aspect < 0.85 ? -0.42 * (1 - dive) * smooth(0.6, 0.7, q) : 0;
+      const lift = aspect < 0.85 ? -0.27 * fitK * (1 - dive) * smooth(0.6, 0.7, q) : 0;
       camera.position.set(side + Math.sin(t * 0.2) * 0.04 * dive, 0.08 + lift, D);
       look.set(side, 0.04 + lift, D - 1);
       brain.rotation.y = t * 0.08 + q * 1.2 + neuro.ty;
@@ -1250,6 +1457,11 @@ const buildScene = (THREE) => {
   return {
     renderer, scene, camera, frame,
     beginIntro: () => { introAt = performance.now() / 1000; if (REDUCED) U.uIntro.value = 1; },
+    burst: () => {
+      if (REDUCED || !brain.visible) return;
+      const t = bMat.uniforms.uNow.value;
+      for (let k = 0; k < 3; k++) { const i = (Math.random() * BN) | 0; fireWave(hit.set(bPos[i * 3], bPos[i * 3 + 1], bPos[i * 3 + 2]), t + k * 0.12); }
+    },
     compile: () => (renderer.compileAsync ? renderer.compileAsync(scene, camera) : Promise.resolve()),
   };
 };
@@ -1265,16 +1477,16 @@ const loop = (now) => {
 setVeil(0.25);
 let THREE = null;
 const glCanvas = $("#gl");
-const dropScene = () => { scene3d = null; glCanvas.style.display = "none"; };
+const dropScene = () => { scene3d = null; glCanvas.style.display = "none"; document.documentElement.classList.add("no-gl"); };
 const hasWebGL = (() => { try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch { return false; } })();
 if (!hasWebGL) {
-  glCanvas.style.display = "none";
+  dropScene();
   console.warn("WebGL unavailable: showing the page without the 3D scene.");
 } else {
   try {
     THREE = await import("https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js");
   } catch (err) {
-    glCanvas.style.display = "none";
+    dropScene();
     showError("The 3D scene could not load (https://cdn.jsdelivr.net three.js). The page still works without it.");
   }
 }
